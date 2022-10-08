@@ -40,6 +40,34 @@ def get_credentials(
     return credentials
 
 
+def get_credentials_2(
+    service_account_blob: Mapping = None,
+    service_account_env_name: str = "SERVICE_ACCOUNT2",
+    scopes: Union[Sequence[str], str] = None,
+    subject: str = None,
+) -> service_account.Credentials:
+    """Loads a Google Service Account into a Credentials object with the given scopes"""
+
+    if not service_account_blob:
+        try:
+            service_account_blob = json.loads(os.environ[service_account_env_name])
+        except (json.JSONDecodeError, KeyError) as error:
+            raise Exception("Service account did not load correctly", error)
+
+    if isinstance(scopes, str):
+        scopes = listify(scopes)
+
+    _scopes = [
+        s if s.startswith("https") else f"https://www.googleapis.com/auth/{s}"
+        for s in scopes
+    ]
+    credentials = service_account.Credentials.from_service_account_info(
+        service_account_blob, scopes=_scopes, subject=subject
+    )
+
+    return credentials
+
+
 def auth_bq() -> bigquery.Client:
     """Returns an initialized BigQuery client object"""
 
@@ -204,7 +232,7 @@ def make_gmail_client(
 
     scopes = scopes or ["gmail.labels", "gmail.modify", "gmail.readonly"]
 
-    credentials = get_credentials(service_account_blob, scopes=scopes, subject=subject)
+    credentials = get_credentials2(service_account_blob, scopes=scopes, subject=subject)
     return build("gmail", "v1", credentials=credentials)
 
 
@@ -216,7 +244,7 @@ def auth_sheets(
     """Returns an initialized Sheets client object"""
 
     scopes = scopes or ["drive"]
-    credentials = get_credentials(service_account_blob, scopes=scopes, subject=subject)
+    credentials = get_credentials2(service_account_blob, scopes=scopes, subject=subject)
 
     return build('sheets', 'v4', credentials=credentials, cache_discovery=False)
 

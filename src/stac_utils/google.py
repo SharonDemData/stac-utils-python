@@ -1,12 +1,14 @@
 import json
 import os
 import sys
+import google.auth
 
 from inflection import parameterize, underscore
 from typing import Any, List, Union, Mapping, Sequence
 
 from google.cloud import storage, bigquery
 from google.oauth2 import service_account
+
 from googleapiclient.discovery import build
 
 from .listify import listify

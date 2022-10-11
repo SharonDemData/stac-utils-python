@@ -191,7 +191,7 @@ def make_gmail_client(
 
     scopes = scopes or ["gmail.labels", "gmail.modify", "gmail.readonly"]
 
-    credentials = get_credentials2(service_account_blob, scopes=scopes, subject=subject)
+    credentials = get_credentials_2(service_account_blob, scopes=scopes, subject=subject)
     return build("gmail", "v1", credentials=credentials)
 
 
@@ -203,7 +203,7 @@ def auth_sheets(
     """Returns an initialized Sheets client object"""
 
     scopes = scopes or ["drive"]
-    credentials = get_credentials2(service_account_blob, scopes=scopes, subject=subject)
+    credentials = get_credentials_2(service_account_blob, scopes=scopes, subject=subject)
 
     return build('sheets', 'v4', credentials=credentials, cache_discovery=False)
 

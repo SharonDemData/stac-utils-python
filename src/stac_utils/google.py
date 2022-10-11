@@ -96,7 +96,7 @@ def run_query(
         credentials = get_credentials(
             service_account_blob, scopes=["bigquery", "drive"], subject=subject
         )
-        client = bigquery.Client(credentials=credentials)
+        client = bigquery.Client(credentials=credentials, project=credentials.project_id)
 
     job = client.query(sql).result()
 

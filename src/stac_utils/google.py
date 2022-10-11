@@ -76,7 +76,7 @@ def auth_bq() -> bigquery.Client:
 
     client = bigquery.Client(
         credentials=credentials,
-        project=credentials.project_id,
+        project='demsgasp',
     )
 
     return client

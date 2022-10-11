@@ -71,7 +71,7 @@ def get_credentials_2(
 def auth_bq() -> bigquery.Client:
     """Returns an initialized BigQuery client object"""
 
-    scopes = ["cloud-platform", "drive"]
+    scopes = ["cloud-platform", "bigquery", "drive"]
     credentials = get_credentials(scopes=scopes)
 
     client = bigquery.Client(

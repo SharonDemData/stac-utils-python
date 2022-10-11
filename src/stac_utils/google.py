@@ -87,17 +87,7 @@ def run_query(
 ) -> List[dict]:
     """Performs a SQL query in BigQuery"""
     if not client:
-        if not service_account_blob:
-            try:
-                service_account_string = os.environ.get("BQ_SERVICE_ACCOUNT") or os.environ.get("SERVICE_ACCOUNT")
-                service_account_blob = json.loads(service_account_string)
-            except (json.JSONDecodeError, KeyError) as error:
-                raise Exception("Service account did not load correctly", error)
-
-        credentials = get_credentials(
-            service_account_blob, scopes=["bigquery", "drive"], subject=subject
-        )
-        client = bigquery.Client(credentials=credentials, project=credentials.project_id)
+        client = auth_bq()
 
     job = client.query(sql).result()
 

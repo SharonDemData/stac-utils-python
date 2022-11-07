@@ -167,7 +167,7 @@ def load_data_from_dataframe(
     dataset_ref = bigquery.Dataset(project_name + "." + dataset_name)
     table_ref = dataset_ref.table(table_name)
 
-    table = client.get_table(table_ref)
+    table = f"{project_name}.{dataset_name}.{table_name}"
 
     print("inserting rows")
 

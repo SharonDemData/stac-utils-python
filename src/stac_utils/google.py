@@ -147,6 +147,7 @@ def create_table_from_dataframe(
                 {", ".join(column_definitions)}
             )
         """
+        print(column_definitions)
         print(table_definition_sql)
         run_query(table_definition_sql, client = client)
         load_data_from_dataframe(

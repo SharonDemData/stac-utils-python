@@ -147,7 +147,7 @@ def create_table_from_dataframe(
                 {", ".join(column_definitions)}
             )
         """
-        print(column_definitions)
+        schem = column_definitions.join(",")
         print(table_definition_sql)
         run_query(table_definition_sql, client = client)
         load_data_from_dataframe(
@@ -155,7 +155,8 @@ def create_table_from_dataframe(
             dataframe,
             project_name,
             dataset_name,
-            table_name)
+            table_name,
+            schem)
 
 def load_data_from_dataframe(
     client: bigquery.Client,
@@ -163,6 +164,7 @@ def load_data_from_dataframe(
     project_name: str,
     dataset_name: str,
     table_name: str,
+    schem
 ):
     """Loads data from the specified dataframe into the specified table in BigQuery"""
     dataset_ref = bigquery.Dataset(project_name + "." + dataset_name)
@@ -173,7 +175,7 @@ def load_data_from_dataframe(
     print("inserting rows")
 
     results = client.insert_rows_from_dataframe(
-        table=table, dataframe=dataframe, chunk_size=10000
+        table=table, selected_fields=schem, dataframe=dataframe, chunk_size=10000
     )
 
     print(results)
